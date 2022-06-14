@@ -1,0 +1,2 @@
+# Vestacka_Intelegencija
+Zadaci
