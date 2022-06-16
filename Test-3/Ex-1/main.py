@@ -2,26 +2,21 @@ from constraint import *
 
 if __name__ == '__main__':
     problem = Problem(BacktrackingSolver())
-    N = int(input())
-    variables = range(1, N + 1)
-    domain = [(i, j) for i in range(N) for j in range(N)]
+    n = int(input())
+    rooks = range(1, n + 1)
+    domain = [(i, j) for i in range(n) for j in range(n)]
 
-    problem.addVariables(variables, domain)
+    problem.addVariables(rooks, domain)
 
-    # -------------------
-    # x1 != x2
-    # y1 != y2
-    # abs(x1 - x2) != abs(y1 - y2)
-
-    for q1 in variables:
-        for q2 in variables:
-            if q1 < q2:
+    for rok1 in rooks:
+        for rok2 in rooks:
+            if rok1 < rok2:
                 problem.addConstraint(
-                    lambda a, b: a[0] != b[0] and a[1] != b[1] and abs(a[0] - b[0]) != abs(a[1] - b[1]), (q1, q2))
+                    lambda r1, r2: r1[0] != r2[0] and r1[1] != r2[1] and abs(r1[0] - r2[0]) != abs(r1[1] - r2[1]),
+                    (rok1, rok2))
 
-    # ----------------------------------------------------
-
-    if N <= 6:
+    if n <= 6:
         print(len(problem.getSolutions()))
     else:
         print(problem.getSolution())
+
