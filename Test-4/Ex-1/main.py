@@ -1,4 +1,3 @@
-import csv
 from sklearn.naive_bayes import CategoricalNB
 from sklearn.preprocessing import OrdinalEncoder
 

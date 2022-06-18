@@ -1,4 +1,3 @@
-import csv
 from sklearn.naive_bayes import GaussianNB
 
 if __name__ == '__main__':
@@ -48,6 +47,14 @@ if __name__ == '__main__':
                ['2', '35', '8.25', '8', '3', '100', '0'], ['1', '24', '10.75', '10', '1', '20', '1'],
                ['1', '19', '8', '8', '1', '160', '1']]
 
+
+    dataset_v1 = []
+    for row in dataset:
+        row_v2 = [float(el) for el in row]
+        dataset_v1.append(row_v2)
+
+    dataset = dataset_v1
+
     train_set = dataset[:int(0.85 * len(dataset))]
     train_x = [row[:-1] for row in train_set]
     train_y = [row[-1] for row in train_set]
@@ -58,6 +65,7 @@ if __name__ == '__main__':
 
     classifier = GaussianNB()
     classifier.fit(train_x, train_y)
+
 
     accuracy = 0
 
@@ -71,9 +79,9 @@ if __name__ == '__main__':
     accuracy = accuracy / len(test_set)
     print(accuracy)
 
-    entry = [el for el in input().split(' ')]
+    entry = [float(el) for el in input().split(' ')]
 
     predicted_class = classifier.predict([entry])[0]
 
-    print(predicted_class)
+    print(int(predicted_class))
     print(classifier.predict_proba([entry]))
