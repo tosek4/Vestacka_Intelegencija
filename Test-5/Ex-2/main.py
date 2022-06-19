@@ -167,6 +167,10 @@ if __name__ == '__main__':
     depth = int(input())
     criterio = input()
 
+    for i in dataset:
+        if dataset.index(i) == (col_index-1):
+            dataset.remove(i)
+
     encoder = OrdinalEncoder()
     encoder.fit([row[:-1] for row in dataset])
 
@@ -197,7 +201,7 @@ if __name__ == '__main__':
     accuracy = accuracy / len(test_set)
 
     print(f'Accuracy: {accuracy}')
-    entry = [el for el in input().split(' ')]
+    entry = [float(el) for el in input().split(' ')]
 
     predicted_class = classifier.predict([entry])[0]
 
