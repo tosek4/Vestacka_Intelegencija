@@ -164,46 +164,49 @@ dataset = [[180.0, 23.6, 25.2, 27.9, 25.4, 14.0, 'Roach'],
 if __name__ == '__main__':
 
     col_index = int(input())
-    depth = int(input())
+    threes = int(input())
     criterio = input()
-
-    for i in dataset:
-        if dataset.index(i) == (col_index-1):
-            dataset.remove(i)
-
-    encoder = OrdinalEncoder()
-    encoder.fit([row[:-1] for row in dataset])
+    new_t = [float(i) for i in input().split(' ')]
 
     train_set = dataset[:int(0.85 * len(dataset))]
-    train_x = [row[:-1] for row in train_set]
-    train_y = [row[-1] for row in train_set]
 
-    train_x = encoder.transform(train_x)
+    train_x = [row[:-1] for row in train_set]
+    tmp_2 = []
+    for t in train_x:
+        tmp = [t[i] for i in range(len(t)) if i != col_index]
+        tmp_2.append(tmp)
+    train_x = tmp_2
+    train_y = [row[-1] for row in train_set]
 
     test_set = dataset[int(0.85 * len(dataset)):]
     test_x = [row[:-1] for row in test_set]
+    tmp_2 = []
+    for t in test_x:
+        tmp = [t[i] for i in range(len(t)) if i != col_index]
+        tmp_2.append(tmp)
+    test_x = tmp_2
+
     test_y = [row[-1] for row in test_set]
 
-    test_x = encoder.transform(test_x)
-
-    classifier = RandomForestClassifier(n_estimators=10, criterion=criterio, max_depth=depth, random_state=0)
+    classifier = RandomForestClassifier(n_estimators=threes, criterion=criterio, random_state=0)
     classifier.fit(train_x, train_y)
 
     accuracy = 0
 
     for i in range(len(test_set)):
-        predicted_class = classifier.predict([test_x[i]])[0]
-        true_class = test_y[i]
-
-        if predicted_class == true_class:
+        if classifier.predict([test_x[i]])[0] == test_y[i]:
             accuracy += 1
 
     accuracy = accuracy / len(test_set)
 
     print(f'Accuracy: {accuracy}')
-    entry = [float(el) for el in input().split(' ')]
 
-    predicted_class = classifier.predict([entry])[0]
+    new_t = [new_t[x] for x in range(len(new_t)) if x != col_index]
+
+    predicted_class = classifier.predict([new_t])[0]
+
+    proba = classifier.predict_proba([new_t])
+    s = ","
 
     print(predicted_class)
-    print(classifier.predict_proba([entry]))
+    print(s.join(map(str, proba)))
