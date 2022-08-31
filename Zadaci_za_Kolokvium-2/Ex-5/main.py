@@ -455,8 +455,10 @@ if __name__ == '__main__':
 
     val_accuracy = val_accuracy / len(val_y)
 
-    if train_accuracy >= val_accuracy * 0.15 + val_accuracy:
+    if train_accuracy - val_accuracy >= val_accuracy * 0.15:
         print('Se sluchuva overfitting')
+    else:
+        print('Ne se sluchuva overfitting')
 
     print(f'Tochnost so trenirachko mnozhestvo: {train_accuracy}')
     print(f'Tochnost so validacisko mnozhestvo: {val_accuracy}')
