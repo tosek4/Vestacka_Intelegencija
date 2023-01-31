@@ -1,4 +1,3 @@
-from sklearn.preprocessing import OrdinalEncoder
 from sklearn.ensemble import RandomForestClassifier
 
 dataset = [[180.0, 23.6, 25.2, 27.9, 25.4, 14.0, 'Roach'],
@@ -161,52 +160,40 @@ dataset = [[180.0, 23.6, 25.2, 27.9, 25.4, 14.0, 'Roach'],
            [145.0, 22.0, 24.0, 25.5, 25.0, 15.0, 'Perch'],
            [1100.0, 40.1, 43.0, 45.5, 27.5, 16.3, 'Perch']]
 
-if __name__ == '__main__':
+def del_col(date,col_index):
+    tmp = []
+    for row in date:
+        t = [row[i] for i in range(len(row)) if i != col_index]
+        tmp.append(t)
+    return tmp
 
+if __name__ == '__main__':
     col_index = int(input())
-    threes = int(input())
-    criterio = input()
-    new_t = [float(i) for i in input().split(' ')]
+    tree_num = int(input())
+    criterion = input()
+    entry = [float(i) for i in input().split(' ')]
 
     train_set = dataset[:int(0.85 * len(dataset))]
-
     train_x = [row[:-1] for row in train_set]
-    tmp_2 = []
-    for t in train_x:
-        tmp = [t[i] for i in range(len(t)) if i != col_index]
-        tmp_2.append(tmp)
-    train_x = tmp_2
+    train_x = del_col(train_x, col_index)
     train_y = [row[-1] for row in train_set]
 
-    test_set = dataset[int(0.85 * len(dataset)):]
+    test_set = dataset[int(0.85*len(dataset)):]
     test_x = [row[:-1] for row in test_set]
-    tmp_2 = []
-    for t in test_x:
-        tmp = [t[i] for i in range(len(t)) if i != col_index]
-        tmp_2.append(tmp)
-    test_x = tmp_2
-
+    test_x = del_col(test_x, col_index)
     test_y = [row[-1] for row in test_set]
 
-    classifier = RandomForestClassifier(n_estimators=threes, criterion=criterio, random_state=0)
-    classifier.fit(train_x, train_y)
+    classifier = RandomForestClassifier(n_estimators=tree_num, criterion=criterion, random_state=0)
+    classifier.fit(train_x,train_y)
 
-    accuracy = 0
-
+    acc = 0
     for i in range(len(test_set)):
         if classifier.predict([test_x[i]])[0] == test_y[i]:
-            accuracy += 1
+            acc += 1
 
-    accuracy = accuracy / len(test_set)
-
-    print(f'Accuracy: {accuracy}')
-
-    new_t = [new_t[x] for x in range(len(new_t)) if x != col_index]
-
-    predicted_class = classifier.predict([new_t])[0]
-
-    proba = classifier.predict_proba([new_t])
-    s = ","
-
-    print(predicted_class)
-    print(s.join(map(str, proba)))
+    acc = acc/len(test_set)
+    entry = [entry[i] for i in range(len(entry)) if i != col_index]
+    s = ','
+    print(f'Accuracy: {acc}')
+    print(classifier.predict([entry])[0])
+    print(s.join(map(str, classifier.predict_proba([entry]))))
